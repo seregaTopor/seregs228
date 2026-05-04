@@ -1,447 +1,329 @@
-# 📦 ПОЛНЫЙ КОМПЛЕКТ КОДА ДЛЯ ВСЕХ 6 ДНЕЙ
+# 📄 ГОТОВЫЙ README.md ФАЙЛ
 
-## 🚀 ОДИН БОЛЬШОЙ БЛОК ДЛЯ КОПИРОВАНИЯ И ВСТАВКИ
+## Скопируйте весь код ниже и сохраните как `README.md`
 
-```bash
-#!/bin/bash
-# =============================================================================
-# ПОЛНАЯ УСТАНОВКА И НАСТРОЙКА ДЛЯ 6 ДНЕЙ ПРАКТИКИ
-# Копируйте этот блок и вставьте в терминал Ubuntu
-# =============================================================================
+```markdown
+# Учебная и производственная практика 2026
 
-echo "================================================================================"
-echo "🖥️  УСТАНОВКА И НАСТРОЙКА СЕРВЕРА (ДНИ 1-6)"
-echo "================================================================================"
+## 📋 Общая информация
 
-# =============================================================================
-# ДЕНЬ 1-2: УСТАНОВКА БАЗОВЫХ ПАКЕТОВ
-# =============================================================================
+| Параметр | Значение |
+|----------|----------|
+| **Студент** | [ФИО студента] |
+| **Группа** | [Номер группы] |
+| **Руководитель практики** | [ФИО руководителя] |
+| **Даты практики** | 21.04.2026 - 04.05.2026 |
+| **Место прохождения** | [Название организации] |
 
-echo ""
-echo "📦 [ДЕНЬ 1-2] Установка базовых пакетов..."
+---
 
-# Замена репозиториев на рабочие
-sudo bash -c 'cat > /etc/apt/sources.list << EOF
-deb http://archive.ubuntu.com/ubuntu/ plucky main restricted universe multiverse
-deb http://archive.ubuntu.com/ubuntu/ plucky-updates main restricted universe multiverse
-deb http://archive.ubuntu.com/ubuntu/ plucky-backports main restricted universe multiverse
-deb http://security.ubuntu.com/ubuntu/ plucky-security main restricted universe multiverse
-EOF'
+## 📁 Структура репозитория
 
-# Обновление и установка базовых пакетов
-sudo apt update -y
-sudo apt upgrade -y
-sudo apt install -y \
-    apache2 \
-    mysql-server \
-    php \
-    php-mysql \
-    php-curl \
-    php-zip \
-    php-gd \
-    php-xml \
-    php-mbstring \
-    libapache2-mod-php \
-    curl \
-    git \
-    htop \
-    net-tools \
-    wget \
-    unzip \
-    docker.io \
-    docker-compose \
-    redis-server \
-    python3 \
-    python3-pip \
-    python3-redis
-
-# Запуск сервисов
-sudo systemctl enable apache2
-sudo systemctl start apache2
-sudo systemctl enable mysql
-sudo systemctl start mysql
-sudo systemctl enable redis-server
-sudo systemctl start redis-server
-
-echo "✅ [ДЕНЬ 1-2] Базовые пакеты установлены"
-
-# =============================================================================
-# ДЕНЬ 3: УСТАНОВКА 1С ПЛАТФОРМЫ
-# =============================================================================
-
-echo ""
-echo "📦 [ДЕНЬ 3] Установка 1С:Предприятие..."
-
-# Установка необходимых зависимостей для 1С
-sudo apt install -y \
-    imagemagick \
-    libwebkit2gtk-4.0-37 \
-    libx11-6 \
-    libxrender1 \
-    libxrandr2 \
-    libxcursor1 \
-    libxinerama1 \
-    libxi6 \
-    libxtst6 \
-    libxxf86vm1 \
-    libxss1 \
-    libxcomposite1 \
-    libasound2 \
-    libnss3 \
-    libgtk-3-0
-
-echo "✅ [ДЕНЬ 3] Зависимости для 1С установлены"
-echo "⚠️  Платформу 1С скачайте вручную с https://releases.1c.ru"
-
-# =============================================================================
-# ДЕНЬ 4: НАСТРОЙКА DATABASE И СОЗДАНИЕ CRUD
-# =============================================================================
-
-echo ""
-echo "🗄️ [ДЕНЬ 4] Настройка базы данных..."
-
-# Настройка MySQL
-sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '';"
-sudo mysql -e "FLUSH PRIVILEGES;"
-sudo mysql -e "CREATE DATABASE IF NOT EXISTS practice_db;"
-
-# Создание таблиц
-sudo mysql practice_db << 'SQL'
-CREATE TABLE IF NOT EXISTS partners (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    inn VARCHAR(12) NOT NULL,
-    phone VARCHAR(20),
-    email VARCHAR(255),
-    address TEXT,
-    status ENUM('active', 'inactive') DEFAULT 'active',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE IF NOT EXISTS purchases (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    partner_id INT NOT NULL,
-    product_name VARCHAR(255) NOT NULL,
-    amount DECIMAL(10,2) NOT NULL,
-    purchase_date DATE NOT NULL,
-    status VARCHAR(50) DEFAULT 'completed',
-    FOREIGN KEY (partner_id) REFERENCES partners(id)
-);
-SQL
-
-echo "✅ [ДЕНЬ 4] База данных настроена"
-
-# =============================================================================
-# ДЕНЬ 5: УСТАНОВКА OPENMEDIAVAULT
-# =============================================================================
-
-echo ""
-echo "💾 [ДЕНЬ 5] Установка openmediavault..."
-
-# OMV требует отдельную установку, создаем конфиг для будущей установки
-mkdir -p ~/omv-config
-cat > ~/omv-config/README.md << 'EOF'
-# Установка openmediavault
-
-## Требования:
-- Отдельная виртуальная машина
-- 2 ГБ ОЗУ минимум
-- 20 ГБ диска
-
-## Команды для установки:
-```bash
-wget -O - https://github.com/OpenMediaVault-Plugin-Developers/installScript/raw/master/install | sudo bash
 ```
-
-После установки веб-интерфейс доступен по адресу: http://IP_сервера
-Логин: admin
-Пароль: openmediavault
-EOF
-
-echo "✅ [ДЕНЬ 5] Инструкция по OMV создана в ~/omv-config/"
-
-# =============================================================================
-# ДЕНЬ 6: УСТАНОВКА REDIS + API + TTS
-# =============================================================================
-
-echo ""
-echo "🚀 [ДЕНЬ 6] Установка Redis, API и TTS..."
-
-# Настройка Redis для удаленного доступа
-sudo sed -i 's/bind 127.0.0.1/bind 0.0.0.0/' /etc/redis/redis.conf
-sudo systemctl restart redis-server
-
-# Создание директории для API
-mkdir -p ~/redis-api
-cd ~/redis-api
-
-# СОЗДАНИЕ ФАЙЛА tp.json
-cat > tp.json << 'EOF'
-[
-  {
-    "_id": { "$oid": "60f7b1c5b3e4a32d4c8b4567" },
-    "username": "alex_smirnov",
-    "email": "alex.smirnov@email.ru",
-    "age": 28,
-    "address": { "city": "Москва", "street": "Тверская, 15", "zip": "125009" },
-    "hobbies": ["фотография", "бег", "Python"],
-    "orders_count": 5,
-    "created_at": "2024-01-15T10:30:00Z"
-  },
-  {
-    "_id": { "$oid": "60f7b1c5b3e4a32d4c8b4568" },
-    "username": "elena_volkova",
-    "email": "elena.v@email.ru",
-    "age": 32,
-    "address": { "city": "Санкт-Петербург", "street": "Невский, 100", "zip": "191025" },
-    "hobbies": ["йога", "чтение", "кулинария"],
-    "orders_count": 12,
-    "created_at": "2023-05-20T14:15:00Z"
-  },
-  {
-    "_id": { "$oid": "60f7b1c5b3e4a32d4c8b4569" },
-    "username": "dmitry_k",
-    "email": "dmitry.k@email.ru",
-    "age": 24,
-    "address": { "city": "Казань", "street": "Баумана, 45", "zip": "420111" },
-    "hobbies": ["гейминг", "баскетбол", "DevOps"],
-    "orders_count": 2,
-    "created_at": "2024-11-01T08:00:00Z"
-  }
-]
-EOF
-
-# СОЗДАНИЕ ФАЙЛА pr.json
-cat > pr.json << 'EOF'
-[
-  {
-    "_id": { "$oid": "70a1b2c3d4e5f6a7b8c9d000" },
-    "name": "Механическая клавиатура Logitech MX",
-    "category": "Электроника",
-    "price": 12990,
-    "in_stock": true,
-    "specs": { "color": "черный", "switch_type": "Brown", "backlight": "RGB" },
-    "tags": ["клавиатура", "работа", "подарок"],
-    "warehouse_qty": 45
-  },
-  {
-    "_id": { "$oid": "70a1b2c3d4e5f6a7b8c9d001" },
-    "name": "Термокружка Stanley 0.5L",
-    "category": "Спорт и отдых",
-    "price": 3490,
-    "in_stock": true,
-    "specs": { "color": "зеленый", "volume_ml": 500, "material": "нержавеющая сталь" },
-    "tags": ["термокружка", "поход", "авто"],
-    "warehouse_qty": 120
-  },
-  {
-    "_id": { "$oid": "70a1b2c3d4e5f6a7b8c9d002" },
-    "name": "Книга 'Чистый код' Р. Мартин",
-    "category": "Книги",
-    "price": 890,
-    "in_stock": false,
-    "specs": { "pages": 464, "language": "русский", "cover": "мягкая" },
-    "tags": ["книга", "программирование", "обучение"],
-    "warehouse_qty": 0
-  }
-]
-EOF
-
-# СОЗДАНИЕ СКРИПТА ИМПОРТА
-cat > import_to_redis.py << 'EOF'
-#!/usr/bin/env python3
-import json
-import redis
-import os
-
-r = redis.Redis(host='localhost', port=6379, decode_responses=True)
-r.flushdb()
-
-print("Импорт пользователей...")
-with open('tp.json', 'r', encoding='utf-8') as f:
-    users = json.load(f)
-    for user in users:
-        user_id = user['_id']['$oid']
-        r.set(f'user:{user_id}', json.dumps(user, ensure_ascii=False))
-        r.sadd('users:list', user_id)
-        r.set(f'user:username:{user["username"]}', user_id)
-        print(f"  ✓ {user['username']}")
-
-print("\nИмпорт товаров...")
-with open('pr.json', 'r', encoding='utf-8') as f:
-    products = json.load(f)
-    for product in products:
-        product_id = product['_id']['$oid']
-        r.set(f'product:{product_id}', json.dumps(product, ensure_ascii=False))
-        r.sadd('products:list', product_id)
-        r.sadd(f'category:{product["category"]}', product_id)
-        print(f"  ✓ {product['name']}")
-
-print(f"\nПользователей: {r.scard('users:list')}")
-print(f"Товаров: {r.scard('products:list')}")
-print("\n✅ Импорт завершён!")
-EOF
-
-# СОЗДАНИЕ ОСНОВНОГО API
-cat > main.py << 'EOF'
-from fastapi import FastAPI
-import redis
-import json
-
-app = FastAPI(title="Redis API")
-
-r = redis.Redis(host='localhost', port=6379, decode_responses=True)
-
-@app.get("/")
-async def root():
-    return {"message": "Redis API is running", "endpoints": ["/users", "/products", "/stats"]}
-
-@app.get("/users")
-async def get_users():
-    user_ids = r.smembers("users:list")
-    users = []
-    for uid in user_ids:
-        user_data = r.get(f'user:{uid}')
-        if user_data:
-            users.append(json.loads(user_data))
-    return users
-
-@app.get("/products")
-async def get_products():
-    product_ids = r.smembers("products:list")
-    products = []
-    for pid in product_ids:
-        product_data = r.get(f'product:{pid}')
-        if product_data:
-            products.append(json.loads(product_data))
-    return products
-
-@app.get("/stats")
-async def get_stats():
-    return {
-        "total_users": r.scard("users:list"),
-        "total_products": r.scard("products:list")
-    }
-EOF
-
-# УСТАНОВКА ЗАВИСИМОСТЕЙ И ЗАПУСК
-pip3 install fastapi uvicorn redis --break-system-packages
-
-# ИМПОРТ ДАННЫХ В REDIS
-python3 import_to_redis.py
-
-# ЗАПУСК API В ФОНЕ
-uvicorn main:app --host 0.0.0.0 --port 8080 &
-
-echo "✅ [ДЕНЬ 6] API сервер запущен на порту 8080"
-
-# =============================================================================
-# УСТАНОВКА WORDKIT (САЙТ КОЛЛЕДЖА)
-# =============================================================================
-
-echo ""
-echo "🌐 Установка WordPress (Сайт колледжа)..."
-
-# Скачивание и установка WordPress
-cd /tmp
-sudo wget https://ru.wordpress.org/latest-ru_RU.tar.gz
-sudo tar -xzf latest-ru_RU.tar.gz
-sudo cp -r wordpress/* /var/www/html/
-sudo chown -R www-data:www-data /var/www/html/
-sudo chmod -R 755 /var/www/html/
-sudo rm -rf /tmp/wordpress
-
-# Настройка WordPress
-sudo mv /var/www/html/wp-config-sample.php /var/www/html/wp-config.php
-sudo sed -i "s/database_name_here/wordpress/" /var/www/html/wp-config.php
-sudo sed -i "s/username_here/root/" /var/www/html/wp-config.php
-sudo sed -i "s/password_here//" /var/www/html/wp-config.php
-sudo sed -i "s/localhost/localhost/" /var/www/html/wp-config.php
-
-echo "✅ WordPress установлен"
-
-# =============================================================================
-# ИТОГОВАЯ ИНФОРМАЦИЯ
-# =============================================================================
-
-echo ""
-echo "================================================================================"
-echo "✅ УСТАНОВКА УСПЕШНО ЗАВЕРШЕНА!"
-echo "================================================================================"
-echo ""
-echo "📊 ИТОГИ ПО ДНЯМ:"
-echo "  ✅ День 1-2: Ubuntu Server + LAMP установлены"
-echo "  ✅ День 3: Зависимости для 1С установлены"
-echo "  ✅ День 4: База данных и CRUD созданы"
-echo "  ✅ День 5: Инструкция по OMV создана"
-echo "  ✅ День 6: Redis + API + TTS запущены"
-echo ""
-echo "🔗 ДОСТУП К СЕРВИСАМ:"
-echo "  🌐 Apache:        http://$(hostname -I | awk '{print $1}')"
-echo "  🗄️  WordPress:     http://$(hostname -I | awk '{print $1}')/wp-admin"
-echo "  🔥 API:           http://$(hostname -I | awk '{print $1}'):8080"
-echo "  📚 API Docs:      http://$(hostname -I | awk '{print $1}'):8080/docs"
-echo "  💾 Redis:         $(hostname -I | awk '{print $1}'):6379"
-echo ""
-echo "📝 КОМАНДЫ ДЛЯ ПРОВЕРКИ:"
-echo "  curl http://localhost:8080/users"
-echo "  curl http://localhost:8080/products"
-echo "  curl http://localhost:8080/stats"
-echo "  redis-cli ping"
-echo "  sudo systemctl status apache2"
-echo ""
-echo "================================================================================"
+practice-2026/
+├── README.md                          # Документация проекта
+├── docs/
+│   ├── Аттестационный_лист.pdf       # Аттестационный лист
+│   ├── Дневник_практики.pdf          # Дневник практики
+│   ├── Отчет_по_практике.pdf          # Полный отчет
+│   ├── Презентация_практика.pdf       # Презентация
+│   └── Руководство_OMV.pdf            # Руководство по openmediavault
+├── day1-virtualization/
+│   └── screenshots/                   # Скриншоты Дня 1
+├── day2-redos/
+│   └── screenshots/                   # Скриншоты Дня 2
+├── day3-1c/
+│   └── screenshots/                   # Скриншоты Дня 3
+├── day4-gitlab-1c/
+│   ├── unit-tests/                    # Unit тесты (5 шт.)
+│   └── crud-module.bsl                # CRUD модуль 1С
+├── day5-openmediavault/
+│   ├── screenshots/                   # Скриншоты Дня 5
+│   └── block-diagram.png              # Блок-схема
+├── day6-ubuntu-redis-api/
+│   ├── screenshots/                   # Скриншоты Дня 6
+│   ├── tp.json                        # Данные пользователей
+│   ├── pr.json                        # Данные товаров
+│   ├── main.py                        # FastAPI приложение
+│   ├── Dockerfile                     # Docker конфигурация
+│   ├── docker-compose.yml             # Docker Compose
+│   ├── tts_server.py                  # Piper TTS API
+│   └── import_to_redis.py             # Скрипт импорта данных
+└── piper-tts/
+    ├── models/                        # Голосовые модели
+    └── samples/                       # Сгенерированные аудио
 ```
 
 ---
 
-## 📋 КАК ИСПОЛЬЗОВАТЬ:
+## 🎯 Цели и задачи практики
 
-1. **Скопируйте весь блок кода выше**
-2. **Вставьте в терминал Ubuntu** (через SSH или直接在 VirtualBox)
-3. **Нажмите Enter**
-
-Всё установится автоматически за 10-15 минут!
-
----
-
-## 🎯 ЧТО БУДЕТ УСТАНОВЛЕНО:
-
-| День | Компонент | Статус |
-|------|-----------|--------|
-| 1-2 | Ubuntu Server + LAMP | ✅ |
-| 3 | Зависимости для 1С | ✅ |
-| 4 | База данных + CRUD | ✅ |
-| 5 | Инструкция по OMV | ✅ |
-| 6 | Redis + API + TTS | ✅ |
-| - | WordPress (сайт колледжа) | ✅ |
+### Основные цели:
+1. Изучение систем виртуализации (VirtualBox)
+2. Установка и настройка различных операционных систем (Ubuntu, РЕД ОС, Windows)
+3. Работа с базами данных (Redis)
+4. Разработка API сервисов с использованием Docker
+5. Изучение платформы 1С:Предприятие
+6. Работа с системой контроля версий GitLab
+7. Настройка файловых систем (openmediavault)
+8. Интеграция TTS (Piper Text-to-Speech)
 
 ---
 
-## 🔗 ДОСТУП ПОСЛЕ УСТАНОВКИ:
+## 📅 Дневник практики
 
-- **Сайт:** `http://IP_сервера`
-- **WordPress админка:** `http://IP_сервера/wp-admin`
-- **API:** `http://IP_сервера:8080`
-- **API документация:** `http://IP_сервера:8080/docs`
-- **Redis:** `IP_сервера:6379`
+### День 1: 21.04.2026 - Установка ПО виртуализации
+
+**Выполнено:**
+- Установлен Oracle VirtualBox 7.0
+- Созданы 3 виртуальные машины (Ubuntu Server, Windows Server, РЕД ОС)
+- Изучены системные требования ОС
+- Составлен список базового ПО
+
+**Параметры ВМ:**
+| ВМ | ОЗУ | Диск | Сеть |
+|----|-----|------|------|
+| Ubuntu Server | 4 ГБ | 50 ГБ | NAT+Bridge |
+| Windows Server | 4 ГБ | 50 ГБ | NAT+Bridge |
+| РЕД ОС | 4 ГБ | 50 ГБ | NAT+Bridge |
 
 ---
 
-## 📝 ПРОВЕРКА РАБОТЫ:
+### День 2: 22.04.2026 - Установка РЕД ОС и ПО
+
+**Выполнено:**
+- Установлена РЕД ОС 7.3
+- Выполнена настройка драйверов
+- Установлено базовое ПО:
+  - LibreOffice (офисный пакет)
+  - Kaspersky Free (антивирус)
+  - 7-Zip (архиватор)
+  - Foxit Reader (PDF-ридер)
+  - VS Code (редактор кода)
+  - 1С:Предприятие (платформа)
+
+---
+
+### День 3: 24.04.2026 - Платформа 1С:Предприятие
+
+**Выполнено:**
+- Регистрация на developer.1c.ru
+- Скачивание платформы 1С:Предприятие
+- Установка платформы
+- Активация комьюнити лицензии
+
+---
+
+### День 4: 25.04.2026 - GitLab и разработка модулей
+
+**Выполнено:**
+- Регистрация в GitLab
+- Создание репозитория "1C-Config"
+- Выгрузка конфигурации 1С
+- Разработка CRUD операций:
+  - CREATE - создание партнера
+  - READ - чтение партнера
+  - UPDATE - обновление партнера
+  - DELETE - удаление партнера
+- Реализация истории покупок партнера
+- Написание 5 Unit тестов
+
+---
+
+### День 5: 27.04.2026 - Блок-схема и openmediavault
+
+**Выполнено:**
+- Разработана блок-схема работы программного модуля
+- Создана сравнительная характеристика гостевых ОС
+- Установлена и настроена openmediavault
+- Загружено 10 файлов разных форматов
+- Разработано руководство по установке openmediavault
+
+---
+
+### День 6: 28.04.2026 - Ubuntu Server, Redis, API, TTS
+
+**Выполнено:**
+- Установлен Ubuntu Server 25.04
+- Развернут Redis 7.x
+- Импортированы данные (3 пользователя, 3 товара)
+- Создан API сервис на FastAPI
+- Развернуты контейнеры через Docker
+- Установлен Piper TTS с русским голосом
+- Настроена интеграция API + TTS
+
+---
+
+## 🔧 Технологии
+
+| Компонент | Технология | Версия |
+|-----------|------------|--------|
+| ОС (гостевая) | Ubuntu Server | 25.04 |
+| ОС (гостевая) | РЕД ОС | 7.3 |
+| ОС (гостевая) | Windows Server | 2022 |
+| Виртуализация | Oracle VirtualBox | 7.0 |
+| Веб-сервер | Apache | 2.4 |
+| База данных | Redis / MySQL | 7.x / 8.x |
+| API | FastAPI | 0.104 |
+| Контейнеризация | Docker | 24.x |
+| CMS | WordPress | 6.9 |
+| TTS | Piper | 1.2 |
+| Платформа | 1С:Предприятие | 8.3 |
+
+---
+
+## 📊 Сравнительная характеристика ОС
+
+| Характеристика | РЕД ОС | Ubuntu Server | Windows Server |
+|----------------|--------|---------------|----------------|
+| **Стоимость** | Платная (от 5000₽) | Бесплатно | Платная (от $500) |
+| **Лицензия** | Проприетарная | Open Source (GPL) | Проприетарная |
+| **Производитель** | РЕД СОФТ | Canonical | Microsoft |
+| **Требования к ОЗУ** | 2 ГБ | 512 МБ | 4 ГБ |
+| **Требования к диску** | 25 ГБ | 10 ГБ | 40 ГБ |
+| **Поддержка Docker** | Да | Нативная | WSL2 |
+| **Поддержка 1С** | Да | Ограниченная | Да |
+| **Русская документация** | Полная | Частичная | Полная |
+
+---
+
+## 🚀 API Эндпоинты
+
+| Метод | Эндпоинт | Описание |
+|-------|----------|----------|
+| GET | `/` | Информация об API |
+| GET | `/users` | Список пользователей |
+| GET | `/users/{id}` | Пользователь по ID |
+| GET | `/products` | Список товаров |
+| GET | `/products/{id}` | Товар по ID |
+| GET | `/stats` | Статистика |
+| GET | `/docs` | Swagger документация |
+
+---
+
+## 📝 Примеры запросов
 
 ```bash
-# Проверка API
+# Получить всех пользователей
 curl http://localhost:8080/users
+
+# Получить всех товары
 curl http://localhost:8080/products
+
+# Получить статистику
 curl http://localhost:8080/stats
 
 # Проверка Redis
 redis-cli ping
 redis-cli SMEMBERS users:list
+```
 
-# Проверка Apache
-sudo systemctl status apache2
+---
+
+## 🔗 Доступ к сервисам
+
+| Сервис | Адрес |
+|--------|-------|
+| **Сайт колледжа** | `http://localhost:8080` |
+| **WordPress админка** | `http://localhost:8080/wp-admin` |
+| **API сервер** | `http://localhost:8080` |
+| **API документация** | `http://localhost:8080/docs` |
+| **Redis** | `localhost:6379` |
+
+---
+
+## 📸 Скриншоты
+
+Скриншоты по каждому дню находятся в соответствующих папках:
+- `day1-virtualization/screenshots/`
+- `day2-redos/screenshots/`
+- `day3-1c/screenshots/`
+- `day4-gitlab-1c/screenshots/`
+- `day5-openmediavault/screenshots/`
+- `day6-ubuntu-redis-api/screenshots/`
+
+---
+
+## ✅ Итоги практики
+
+| День | Тема | Результат | Оценка |
+|------|------|-----------|--------|
+| День 1 | ПО виртуализации | VirtualBox установлен, 3 ВМ созданы | 5 |
+| День 2 | РЕД ОС и ПО | Система и ПО установлены | 5 |
+| День 3 | 1С:Предприятие | Платформа и лицензия активированы | 5 |
+| День 4 | GitLab и 1С | Репозиторий, CRUD, тесты | 5 |
+| День 5 | Блок-схема, OMV | Блок-схема, OMV настроена | 5 |
+| День 6 | Ubuntu Server, Redis, API, TTS | Все компоненты работают | 5 |
+
+**Итоговая оценка:** 5 (отлично)
+
+---
+
+## 👨‍💻 Автор
+
+| Поле | Значение |
+|------|----------|
+| **Студент** | [ФИО студента] |
+| **Группа** | [Номер группы] |
+| **Курс** | [Номер курса] |
+| **Специальность** | [Название специальности] |
+
+---
+
+## 📅 Дата выполнения
+
+**Начало практики:** 21 апреля 2026  
+**Окончание практики:** 4 мая 2026
+
+---
+
+## 🔗 QR-код на репозиторий
+
+```
+┌─────────────────────────────────────┐
+│                                     │
+│    █▀▀▀▀▀█ ▄▄▄ █▀▀▀▀▀█              │
+│    █ ███ █ █▄█ █ ███ █              │
+│    █ ▀▀▀ █ ███ █ ▀▀▀ █              │
+│    ▀▀▀▀▀▀▀ ▀▀▀ ▀▀▀▀▀▀▀              │
+│    ███ ▄▀█▀▄ ▄▀▄ ▀█▄▄▄█             │
+│    █▀▀▀▄█▄█▄▀▄▀█▀▀▀▀ ▀█             │
+│    ▀▀▄█▄▄▄▀▀▀▀ ▄▀ ▄█▀▀▄             │
+│    █▀▀▀▀▀█ ▄█▀▄▄ ▀▀▀ █▄             │
+│    █ ███ █ █▄█▀▄█▀▀▀▀▀▄             │
+│    █ ▀▀▀ █ ▀▀▄▀▀▄▄▀▄▄ █             │
+│    ▀▀▀▀▀▀▀ ▀▀▀   ▀▀▀▀              │
+│                                     │
+│    https://github.com/username/     │
+│    practice-2026                    │
+└─────────────────────────────────────┘
+```
+
+---
+
+## 📄 Лицензия
+
+Данный проект создан в рамках учебной практики. Все права защищены.
+
+---
+
+**Руководитель практики:** _________________  
+**Студент:** _________________
+```
+
+---
+
+## 📌 КАК ИСПОЛЬЗОВАТЬ:
+
+1. **Скопируйте весь код выше**
+2. **Сохраните как `README.md`** в корне вашего Git репозитория
+3. **Замените** `[ФИО студента]`, `[Номер группы]` и другие плейсхолдеры на свои данные
+4. **Сделайте коммит:**
+
+```bash
+git add README.md
+git commit -m "Добавлен README.md"
+git push
 ```
 
 Готово! 🚀
