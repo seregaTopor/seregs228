@@ -1,3 +1,12 @@
+# 💻 ПОЛНЫЙ ГОТОВЫЙ КОД ДЛЯ ВСЕХ ДНЕЙ ПРАКТИКИ
+
+---
+
+## 📁 ДЕНЬ 4: GitLab и 1С (CRUD + Unit тесты)
+
+### Файл: `crud_partner.bsl` - Полный CRUD модуль для 1С
+
+```1c
 ///////////////////////////////////////////////////////////////////////////////
 // Модуль работы с партнерами
 // Версия: 1.0
@@ -402,7 +411,13 @@
 КонецФункции
 
 #КонецОбласти
+```
 
+---
+
+### Файл: `unit_tests.bsl` - Unit тесты (5 шт.)
+
+```1c
 ///////////////////////////////////////////////////////////////////////////////
 // Модуль тестирования CRUD операций
 // Версия: 1.0
@@ -692,7 +707,15 @@
 
 // Запуск тестов
 ЗапуститьВсеТесты();
+```
 
+---
+
+## 📁 ДЕНЬ 6: Ubuntu Server + Redis + API + Piper TTS
+
+### Файл: `tp.json` - Данные пользователей
+
+```json
 [
   {
     "_id": { "$oid": "60f7b1c5b3e4a32d4c8b4567" },
@@ -737,7 +760,13 @@
     "created_at": { "$date": "2024-11-01T08:00:00Z" }
   }
 ]
+```
 
+---
+
+### Файл: `pr.json` - Данные товаров
+
+```json
 [
   {
     "_id": { "$oid": "70a1b2c3d4e5f6a7b8c9d000" },
@@ -782,7 +811,13 @@
     "warehouse_qty": 0
   }
 ]
+```
 
+---
+
+### Файл: `import_to_redis.py` - Импорт данных в Redis
+
+```python
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -949,8 +984,14 @@ def main():
 
 if __name__ == "__main__":
     main()
+```
 
-    #!/usr/bin/env python3
+---
+
+### Файл: `main.py` - FastAPI приложение
+
+```python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 API сервис для работы с Redis
@@ -1316,8 +1357,14 @@ if __name__ == "__main__":
         reload=True,
         log_level="info"
     )
+```
 
-    #!/usr/bin/env python3
+---
+
+### Файл: `tts_server.py` - Piper TTS API сервер
+
+```python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Piper TTS API Server - Синтез речи на русском языке
@@ -1569,8 +1616,14 @@ if __name__ == "__main__":
         reload=True,
         log_level="info"
     )
+```
 
-    # Dockerfile для FastAPI приложения
+---
+
+### Файл: `Dockerfile` - Docker конфигурация
+
+```dockerfile
+# Dockerfile для FastAPI приложения
 FROM python:3.11-slim
 
 WORKDIR /app
@@ -1589,7 +1642,13 @@ EXPOSE 8000
 
 # Запуск приложения
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+```
 
+---
+
+### Файл: `docker-compose.yml` - Docker Compose
+
+```yaml
 version: '3.8'
 
 services:
@@ -1633,13 +1692,25 @@ services:
 
 volumes:
   redis_data:
+```
 
-  # Python зависимости для проекта
+---
+
+### Файл: `requirements.txt` - Python зависимости
+
+```txt
+# Python зависимости для проекта
 fastapi==0.104.1
 uvicorn==0.24.0
 redis==5.0.1
 pydantic==2.5.0
+```
 
+---
+
+### Файл: `setup_ubuntu_server.sh` - Скрипт настройки Ubuntu Server
+
+```bash
 #!/bin/bash
 # Скрипт полной настройки Ubuntu Server
 # День 6: У
